@@ -1,0 +1,23 @@
+[user]
+        name = chzhonge
+        email = chzhonge@gmail.com
+[color]
+        ui = auto
+        diff = auto
+        status = auto
+        branch = auto
+[push]
+        default = current
+[alias]
+        ci = commit
+        st = status
+        co = checkout
+        br = branch
+        lgt = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(white)%s%C(reset) %C(bold white) - %an%C(reset)%C(bold red)%d%C(reset)' --abbrev-commit --date=iso
+        lg = log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold red)%d%C(reset)' --abbrev-commit --date=iso
+        lg1 = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold red)%d%C(reset)' --abbrev-commit --date=iso
+        roh = reset ORIG_HEAD --hard
+[core]
+        excludesfile = ~/.gitignore
+        editor = /usr/bin/vim
+        hooksPath = git-hooks
