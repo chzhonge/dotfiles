@@ -1,0 +1,45 @@
+version : '3.1'
+
+services:
+  nginx:
+    image: nginx:1.19.0
+    ports:
+      - 80:80
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php73
+  mysql:
+    image: mysql:5.7.30
+    volumes:
+      - /home/zhong/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    volumes:
+      - /sessions
+    environment:
+      pma_host: mysql
+      pma_port: 3306
+      pma_arbitrary: 1
+    links:
+      - mysql
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+  php73:
+    build: ./php
+    image: php:7.3.19-fpm-alpine-build
+    volumes:
+      - /home/zhong/work/php:/var/www/html
+    ports:
+      - 9000:9000
+  memcached:
+    image: memcached:1.6.6-alpine
+    ports:
+      - 11211:11211
