@@ -35,7 +35,7 @@ services:
     build: ./php
     image: zhong-php73:0.1
     volumes:
-      - /home/zhong/work/php:/var/www/html
+      - ./work:/var/www/html
     ports:
       - 9000:9000
   memcached:
