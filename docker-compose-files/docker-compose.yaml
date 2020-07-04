@@ -32,7 +32,7 @@ services:
       - 8080:80
   php73:
     build: ./php
-    image: php:7.3.19-fpm-alpine-build
+    image: zhong-php73:0.1
     volumes:
       - /home/zhong/work/php:/var/www/html
     ports:
