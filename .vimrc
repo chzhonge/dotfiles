@@ -11,6 +11,7 @@ Plug 'vim-airline/vim-airline-themes'
 " tree folder
 Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
+Plug 'scrooloose/syntastic'
 " search tool
 " Plug 'kien/ctrlp.vim'
 call plug#end()
@@ -103,6 +104,9 @@ match LeaderTab /^\t/
 "字數過長 highlight
 highlight OverLength ctermbg=DarkGray ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
+
+"php syntastic
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
 
 " 特定檔案讀入轉換
 au BufNewFile,BufRead *.py
