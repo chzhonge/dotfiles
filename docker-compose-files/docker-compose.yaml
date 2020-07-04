@@ -22,9 +22,9 @@ services:
     volumes:
       - /sessions
     environment:
-      pma_host: mysql
-      pma_port: 3306
-      pma_arbitrary: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
     restart: always
     depends_on:
       - mysql
