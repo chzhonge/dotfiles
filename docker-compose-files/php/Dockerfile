@@ -1,7 +1,7 @@
 FROM php:7.3.19-fpm-alpine
 
 RUN apk update \
-    && docker-php-ext-install mysqli pdo pdo_mysql \
+    && docker-php-ext-install mysqli pdo pdo_mysql opcache \
     && apk add --no-cache --update libmemcached-libs zlib \
     && apk add iputils \
     && apk add $PHPIZE_DEPS && pecl install xdebug && \
