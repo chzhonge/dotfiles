@@ -12,6 +12,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/syntastic'
+Plug 'stephpy/vim-yaml'
 " search tool
 " Plug 'kien/ctrlp.vim'
 call plug#end()
@@ -121,6 +122,15 @@ au BufNewFile,BufRead *.php,*.json,*.vue,*.js,*.html,*.css,*.scss
 	\ set softtabstop=4 |
 	\ set shiftwidth=4 |
 	\ set textwidth=119 |
+
+
+" add yaml stuffs
+au BufNewFile,BufRead *.{yaml,yml}
+       \ set filetype=yaml |
+       \ set foldmethod=indent |
+       \ set ts=2 |
+       \ set sw=2 |
+       \ set expandtab |
 
 "notice reason
 "ref:https://stackoverflow.com/a/49218216
