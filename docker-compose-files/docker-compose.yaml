@@ -16,7 +16,7 @@ services:
     volumes:
       - /docker-data/mysql:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: 1234
     ports:
       - 3306:3306
   phpmyadmin:
