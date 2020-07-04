@@ -1,6 +1,5 @@
 #!/bin/bash
 
-packageList=vim,zsh,git,tig,tmux
 declare -a packageList=(
  "vim" "zsh" "git" "tig"
  "tmux" "bat" "curl" "apache2-utils"
