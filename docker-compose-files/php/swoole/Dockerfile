@@ -8,4 +8,5 @@ RUN apk add --no-cache \
 
 RUN set -xe && \
         pecl install swoole-${SWOOLE_VERSION} && \
+        docker-php-ext-install mysqli pdo pdo_mysql && \
         docker-php-ext-enable swoole
