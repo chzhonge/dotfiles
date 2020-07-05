@@ -4,7 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 #export PATH="/usr/local/Cellar/git/:$PATH"
-export PATH=/usr/local/bin:/Users/deric/.composer/vendor/bin:$PATH
+export PATH=/usr/local/bin:$PATH
 export LC_ALL=en_US.UTF-8
 #source $(brew --prefix php-version)/php-version.sh
 #source $(brew --prefix php-version)/php-version.sh
