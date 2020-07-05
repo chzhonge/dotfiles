@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/deric/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 #export PATH="/usr/local/Cellar/git/:$PATH"
 export PATH=/usr/local/bin:/Users/deric/.composer/vendor/bin:$PATH
 export LC_ALL=en_US.UTF-8
