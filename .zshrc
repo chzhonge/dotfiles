@@ -94,6 +94,8 @@ source $ZSH/oh-my-zsh.sh
  alias mysqladmin="/usr/local/mysql/bin/mysqladmin"
  alias mkl="make help | less"
  alias dk="docker"
+ alias composer="docker run --rm -it -v `pwd`:/app composer:2.0.0-alpha2"
+ alias php="docker run --rm -it php:7.3-cli-alpine"
 # alias dka="docker rm $(docker ps -a -q)"
 # alias dkrmi="docker rmi $(docker images -q)"
  alias sl='/usr/local/bin/sl'
