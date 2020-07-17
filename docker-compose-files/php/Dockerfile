@@ -1,19 +1,17 @@
 FROM php:7.3.19-fpm-alpine
 
-RUN apk update \
-    && docker-php-ext-install mysqli pdo pdo_mysql opcache \
-    && apk add --no-cache --update libmemcached-libs zlib \
-    && apk add iputils \
-    && apk add $PHPIZE_DEPS && pecl install xdebug && \
-    echo 'zend_extension=xdebug.so' > /usr/local/etc/php/conf.d/docker-php-xdebug.ini
+# ref: https://wiki.alpinelinux.org/wiki/Setting_the_timezone
+RUN set -x \
+    && apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/Asia/Taipei /etc/localtime \
+    && echo "Asia/Taipei" > /etc/timezone \
+    && apk del tzdata
 
-# ref https://stackoverflow.com/questions/40894385
-ENV MEMCACHED_DEPS zlib-dev libmemcached-dev cyrus-sasl-dev
-RUN set -xe \
-    && apk add --no-cache --update --virtual .phpize-deps $PHPIZE_DEPS \
-    && apk add --no-cache --update --virtual .memcached-deps $MEMCACHED_DEPS \
-    && pecl install memcached \
-    && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/20_memcached.ini \
-    && rm -rf /usr/share/php7 \
-    && rm -rf /tmp/* \
-    && apk del .memcached-deps .phpize-deps
+RUN set -x \
+    && apk add --no-cache libmemcached-dev \
+    && apk add --no-cache --virtual .deps $PHPIZE_DEPS zlib-dev \
+    && pecl install memcached xdebug \
+    && docker-php-ext-enable memcached xdebug \
+    && apk del --no-network .deps
+
+RUN docker-php-ext-install bcmath pdo_mysql
