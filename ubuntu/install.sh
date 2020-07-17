@@ -4,6 +4,7 @@ declare -a packageList=(
  "vim" "zsh" "git" "tig"
  "tmux" "bat" "curl" "apache2-utils"
  "docker.io docker-compose"
+ "tree"
 )
 
 declare -a dockerImageList=(
