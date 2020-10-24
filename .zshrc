@@ -128,7 +128,7 @@ source $ZSH/oh-my-zsh.sh
        else
          cmd="/app/$1"
      fi
-     docker run --rm -v `pwd`:/app php:7.3-cli-alpine php $cmd
+     docker run --rm -v `pwd`:/app php:7.3-cli-alpine php -d error_reporting=E_ALL $cmd
  }
  function gnf() {
      grep -rni $1 . | less
