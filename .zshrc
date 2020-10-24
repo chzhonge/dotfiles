@@ -95,7 +95,6 @@ source $ZSH/oh-my-zsh.sh
  alias mkl="make help | less"
  alias dk="docker"
  alias composer="docker run --rm -it -v `pwd`:/app composer:2.0.0-alpha2"
- alias php="docker run --rm -it php:7.3-cli-alpine"
 # alias dka="docker rm $(docker ps -a -q)"
 # alias dkrmi="docker rmi $(docker images -q)"
  alias sl='/usr/local/bin/sl'
@@ -118,6 +117,19 @@ source $ZSH/oh-my-zsh.sh
 # function dkrms() {
 #     dk images | grep $1 | awk '{print $3}' | xargs -L 1 docker rmi
 # }
+ function php() {
+     cmd=""
+     if [ -z "$1" ]
+     then
+       cmd="-v"
+     elif [ "-" = "${1:0:1}" ]
+       then
+         cmd=$1
+       else
+         cmd="/app/$1"
+     fi
+     docker run --rm -v `pwd`:/app php:7.3-cli-alpine php $cmd
+ }
  function gnf() {
      grep -rni $1 . | less
  }
