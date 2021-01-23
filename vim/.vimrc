@@ -117,12 +117,16 @@ au BufNewFile,BufRead *.py
 	\ set textwidth=79 |
 	\ set fileformat=unix |
 
-au BufNewFile,BufRead *.php,*.json,*.vue,*.js,*.html,*.css,*.scss
+au BufNewFile,BufRead *.php,*.json,*.vue,*.js,*.html
 	\ set tabstop=4 |
 	\ set softtabstop=4 |
 	\ set shiftwidth=4 |
 	\ set textwidth=119 |
 
+au BufNewFile,BufRead *.css,*.scss
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2 |
 
 " add yaml stuffs
 au BufNewFile,BufRead *.{yaml,yml}
