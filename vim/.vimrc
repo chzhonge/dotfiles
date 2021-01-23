@@ -117,11 +117,19 @@ au BufNewFile,BufRead *.py
 	\ set textwidth=79 |
 	\ set fileformat=unix |
 
-au BufNewFile,BufRead *.php,*.json,*.vue,*.js,*.html
+au BufNewFile,BufRead *.php,*.json
 	\ set tabstop=4 |
 	\ set softtabstop=4 |
 	\ set shiftwidth=4 |
 	\ set textwidth=119 |
+
+au BufNewFile,BufRead *.html,*.js,*.vue 
+        \ set tabstop=2 |
+        \ set softtabstop=2 |
+        \ set shiftwidth=2 |
+        \ set expandtab |
+        \ set autoindent |
+        \ set fileformat=unix
 
 au BufNewFile,BufRead *.css,*.scss
     \ set tabstop=2 |
