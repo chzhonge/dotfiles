@@ -109,10 +109,6 @@ source $ZSH/oh-my-zsh.sh
  alias pam='php artisan maghead'
  alias pat='php artisan tinker'
  alias pmi='php artisan migrate:reset | php artisan migrate'
- alias pfix='php /usr/local/bin/php-cs-fixer fix'
-
- alias gbrm='rm -rf _book'
- alias irc='mosh --ssh="ssh -p 222" irc.pixnet.tw'
 
  # docker
  alias dk="docker"
