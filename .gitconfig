@@ -20,4 +20,4 @@
 [core]
         excludesfile = ~/.gitignore
         editor = /usr/bin/vim
-        hooksPath = git-hooks
+        hooksPath = ~/work/git-hooks
