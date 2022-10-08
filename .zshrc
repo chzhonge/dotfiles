@@ -91,32 +91,46 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # alias mysql="/usr/local/mysql/bin/mysql"
- alias mysqladmin="/usr/local/mysql/bin/mysqladmin"
+
  alias mkl="make help | less"
- alias dk="docker"
- alias composer="docker run --rm -it -v `pwd`:/app --user $(id -u):$(id -g) composer:2.0.0-alpha2"
-# alias dka="docker rm $(docker ps -a -q)"
-# alias dkrmi="docker rmi $(docker images -q)"
+ alias zsu="upgrade_oh_my_zsh"
+
+# typo
+ alias dc='cd'
+
+# other
  alias sl='/usr/local/bin/sl'
+
+# go
+ alias goco="golangci-lint run"
+
+# php laravel
  alias pa='php artisan'
  alias pam='php artisan maghead'
  alias pat='php artisan tinker'
  alias pmi='php artisan migrate:reset | php artisan migrate'
-# alias pfix='php /usr/local/bin/php-cs-fixer fix'
-# alias psysh="~/work/script/psysh"
- alias dc='cd'
-# alias kbcgp='kubectl get pods'
-# alias kbclog='kubectl log -f'
+ alias pfix='php /usr/local/bin/php-cs-fixer fix'
+
  alias gbrm='rm -rf _book'
  alias irc='mosh --ssh="ssh -p 222" irc.pixnet.tw'
 
- alias zsu="upgrade_oh_my_zsh"
+ # docker
+ alias dk="docker"
+ alias dka="docker rm $(docker ps -a -q)"
+ alias dkrmi="docker rmi $(docker images -q)"
+
+ # container
+ alias composer="docker run --rm -it -v `pwd`:/app --user $(id -u):$(id -g) composer:2.0.0-alpha2"
+
+ # ide
  alias phpstorm="open -a PhpStorm"
+ alias goland="open -a Goland"
 
+# func
+ function dkrms() {
+     dk images | grep $1 | awk '{print $3}' | xargs -L 1 docker rmi
+ }
 
-# function dkrms() {
-#     dk images | grep $1 | awk '{print $3}' | xargs -L 1 docker rmi
-# }
  function php() {
      cmd=""
      if [ -z "$1" ]
@@ -130,6 +144,7 @@ source $ZSH/oh-my-zsh.sh
      fi
      docker run --rm -v `pwd`:/app php:7.3-cli-alpine php -d error_reporting=E_ALL $cmd
  }
+
  function gnf() {
      grep -rni $1 . | less
  }
@@ -139,20 +154,17 @@ source $ZSH/oh-my-zsh.sh
  }
 # 如果有遇到檔案搬移又需要查搬移前的 log，可以在 `git log` 後面加 `--follow`
 
-
 # this is call path
 #export PATH="$(brew --prefix homebrew/core/php@7.0)/bin:$PATH"
 #export PATH="$(brew --prefix homebrew/php/php71)/bin:$PATH"
 #see http://mozy-ok.hatenablog.com/entry/2018/04/13/185313
-#
+
 #see https://github.com/creationix/nvm#install--update-script
 #see https://stackoverflow.com/questions/28225045/no-such-keg-usr-local-cellar-git
 
 #see https://medium.com/@myread02/nvm-%E5%88%87%E6%8F%9B-node-%E7%89%88%E6%9C%AC%E9%AC%BC%E6%89%93%E7%89%86%E5%95%8F%E9%A1%8C-9c24fe0c627b
 
-
 export GREP_OPTIONS='--exclude-dir=\.git --exclude-dir=node_modules --exclude=bootstrap\.min\.js'
-
 
 #see https://stackoverflow.com/questions/6565471/how-can-i-exclude-directories-from-grep-r
 #is expanded by the shell (e.g. Bash), not by grep, into this:
