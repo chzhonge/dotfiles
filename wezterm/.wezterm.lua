@@ -11,6 +11,7 @@ local is_windows = wezterm.target_triple:find("windows") ~= nil
 config.debug_key_events = true
 config.scrollback_lines = 9000
 config.keys = {}
+config.mouse_bindings = {}
 
 if is_windows then
   -- ==== Windows: Use Wezterm Native Tabs/Panes (Mimicking Tmux) ====
@@ -32,6 +33,33 @@ else
       key = 'm',
       mods = 'CMD',
       action = wezterm.action.DisableDefaultAssignment,
+    },
+    -- Copy Mode (Vim-like)
+    {
+      key = 'X',
+      mods = 'CMD|SHIFT',
+      action = wezterm.action.ActivateCopyMode,
+    },
+    -- Quick Select
+    {
+      key = ' ',
+      mods = 'CMD|SHIFT',
+      action = wezterm.action.QuickSelect,
+    },
+  }
+
+  -- Mouse bindings for Mac (iTerm2-like)
+  config.mouse_bindings = {
+    -- Option + Command + Click to select the whole line and copy it
+    {
+      event = { Down = { streak = 1, button = 'Left' } },
+      mods = 'CMD|OPT',
+      action = wezterm.action.SelectTextAtMouseCursor 'Line',
+    },
+    {
+      event = { Up = { streak = 1, button = 'Left' } },
+      mods = 'CMD|OPT',
+      action = wezterm.action.CopyTo 'Clipboard',
     },
   }
 end
