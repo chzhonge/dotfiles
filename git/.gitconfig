@@ -18,6 +18,6 @@
         lg1 = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold red)%d%C(reset)' --abbrev-commit --date=iso
         roh = reset ORIG_HEAD --hard
 [core]
-        excludesfile = ~/.gitignore
+        excludesfile = ~/work/dotfiles/git/.gitignore
         editor = /usr/bin/vim
-        hooksPath = ~/work/git-hooks
+        hooksPath = ~/work/dotfiles/git-hooks
