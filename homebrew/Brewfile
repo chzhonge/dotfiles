@@ -11,6 +11,8 @@ brew "k6"
 brew "hey"
 brew "wrk"
 brew "gh"
+brew "tig"
+brew "stow"
 
 # GUI apps (Casks)
 cask "obsidian"

@@ -72,17 +72,11 @@ deploy_config() {
   fi
 }
 
-# 執行複製
-deploy_config "./wezterm/.wezterm.lua" "$HOME/.wezterm.lua"
-deploy_config "./wezterm/windows.lua" "$HOME/.config/wezterm/windows.lua"
-deploy_config "./tmux/.tmux.conf" "$HOME/.tmux.conf"
-deploy_config "./git/.gitconfig" "$HOME/.gitconfig"
-deploy_config "./git/.gitignore" "$HOME/.gitignore"
-deploy_config "./vim/.vimrc" "$HOME/.vimrc"
-deploy_config "./zsh/.zshrc" "$HOME/.zshrc"
+# 執行部署
+echo "🔗 使用 GNU Stow 連結主要設定檔..."
+stow -t ~ wezterm zsh vim tmux git
 
-# 複製 zsh theme
-mkdir -p "$HOME/.oh-my-zsh/custom/themes"
+echo "🚀 部署特殊路徑檔案..."
 deploy_config "./zsh/maran.zsh-theme" "$HOME/.oh-my-zsh/custom/themes/maran.zsh-theme"
 
 # 安裝 vim-plug

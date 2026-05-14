@@ -143,6 +143,10 @@ source $ZSH/oh-my-zsh.sh
  }
 # 如果有遇到檔案搬移又需要查搬移前的 log，可以在 `git log` 後面加 `--follow`
 
+ function bbad {
+     brew bundle --file="~/work/dotfiles/homebrew/Brewfile" --verbose
+ }
+
 # this is call path
 #export PATH="$(brew --prefix homebrew/core/php@7.0)/bin:$PATH"
 #export PATH="$(brew --prefix homebrew/php/php71)/bin:$PATH"
