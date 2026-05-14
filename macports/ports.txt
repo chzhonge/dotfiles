@@ -1,0 +1,9 @@
+git
+zsh
+tmux
+wezterm
+ripgrep
+wget
+jq
+mise
+tree

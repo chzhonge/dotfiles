@@ -1,0 +1,22 @@
+# CLI tools
+brew "git"
+brew "zsh"
+brew "tmux"
+brew "ripgrep"
+brew "wget"
+brew "jq"
+brew "mise"
+brew "tree"
+brew "k6"
+brew "hey"
+brew "wrk"
+brew "gh"
+
+# GUI apps (Casks)
+cask "obsidian"
+cask "wezterm"
+cask "orbstack"
+cask "visual-studio-code"
+cask "firefox"
+cask "google-chrome"
+cask "bruno"

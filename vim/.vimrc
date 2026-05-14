@@ -12,7 +12,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/syntastic'
-Plug 'stephpy/vim-yaml'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'sheerun/vim-polyglot'
+Plug 'editorconfig/editorconfig-vim'
 " search tool
 " Plug 'kien/ctrlp.vim'
 call plug#end()
@@ -28,14 +30,20 @@ let g:airline#extensions#tabline#enabled = 1
 " tab 顯示的檔案路徑
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
+"vim-go settings
+let g:go_fmt_command = "goimports"    " 存檔時自動修正 import 並排版
+let g:go_auto_type_info = 1           " 自動顯示變數類型
+let g:go_highlight_functions = 1      " 高亮函式名稱
+let g:go_highlight_methods = 1        " 高亮方法名稱
+let g:go_highlight_operators = 1      " 高亮運算子
+let g:go_highlight_types = 1          " 高亮類型名稱
+let g:go_highlight_build_constraints = 1
 
 "auto-pairs
 let g:AutoPairsFlyMode = 1
 
 "package setting-end
 
-"停止相容vi
-set nocompatible
 
 "show ruler words num
 set ruler
@@ -47,10 +55,8 @@ set showmatch
 "display line number
 set number
 
-"avoid backspace can't delete indent,eol,start
-"ref: https://www.smslit.top/2016/11/27/vim-backspace-invalid/
-"like set backspace=indent,eol,star
-set backspace=2
+"更現代的退格鍵行為
+set backspace=indent,eol,start
 
 "as:sc
 set showcmd
@@ -106,48 +112,9 @@ match LeaderTab /^\t/
 highlight OverLength ctermbg=DarkGray ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
-"php syntastic
-let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
-
-" 特定檔案讀入轉換
-au BufNewFile,BufRead *.py
-	\ set tabstop=4 |
-	\ set softtabstop=4 |
-	\ set shiftwidth=4 |
-	\ set textwidth=79 |
-	\ set fileformat=unix |
-
-au BufNewFile,BufRead *.php,*.json
-	\ set tabstop=4 |
-	\ set softtabstop=4 |
-	\ set shiftwidth=4 |
-	\ set textwidth=119 |
-
-au BufNewFile,BufRead *.html,*.js,*.vue 
-        \ set tabstop=2 |
-        \ set softtabstop=2 |
-        \ set shiftwidth=2 |
-        \ set expandtab |
-        \ set autoindent |
-        \ set fileformat=unix
-
-au BufNewFile,BufRead *.css,*.scss
-    \ set tabstop=2 |
-    \ set softtabstop=2 |
-    \ set shiftwidth=2 |
-
-" add yaml stuffs
-au BufNewFile,BufRead *.{yaml,yml}
-       \ set filetype=yaml |
-       \ set foldmethod=indent |
-       \ set ts=2 |
-       \ set sw=2 |
-       \ set expandtab |
-
-"notice reason
-"ref:https://stackoverflow.com/a/49218216
+"開啟插件與縮排支援
 syntax on
-filetype indent on
+filetype plugin indent on
 
 
 function! RemoveTrailingWhitespace()
