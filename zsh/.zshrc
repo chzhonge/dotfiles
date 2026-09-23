@@ -104,12 +104,12 @@ source $ZSH/oh-my-zsh.sh
  alias pmi='php artisan migrate:reset | php artisan migrate'
 
  # docker
- alias dk="docker"
- alias dka="docker rm $(docker ps -a -q)"
- alias dkrmi="docker rmi $(docker images -q)"
+ alias dk='docker'
+ alias dka='docker rm $(docker ps -a -q)'
+ alias dkrmi='docker rmi $(docker images -q)'
 
  # container
- alias composer="docker run --rm -it -v `pwd`:/app --user $(id -u):$(id -g) composer:2.0.0-alpha2"
+ alias composer='docker run --rm -it -v `pwd`:/app --user $(id -u):$(id -g) composer:2.0.0-alpha2'
 
  # ide
  alias phpstorm="open -a PhpStorm"
@@ -155,6 +155,5 @@ source $ZSH/oh-my-zsh.sh
 #see https://github.com/creationix/nvm#install--update-script
 #see https://stackoverflow.com/questions/28225045/no-such-keg-usr-local-cellar-git
 
-#see https://medium.com/@myread02/nvm-%E5%88%87%E6%8F%9B-node-%E7%89%88%E6%9C%AC%E9%AC%BC%E6%89%93%E7%89%86%E5%95%8F%E9%A1%8C-9c24fe0c627b
-
-export GREP_OPTIONS='--exclude-dir=\.git --exclude-dir=node_modules --exclude=bootstrap\.min\.js'
+# uv
+. "$HOME/.local/bin/env"
