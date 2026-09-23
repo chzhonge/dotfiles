@@ -6,7 +6,37 @@
 
 set -euo pipefail
 
-BREWFILE_PATH="./homebrew/Brewfile"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+BREWFILE_PATH="$SCRIPT_DIR/homebrew/Brewfile"
+CLEANUP=false
+
+if [[ ${1:-} == "--cleanup" && $# -eq 1 ]]; then
+  CLEANUP=true
+elif (( $# != 0 )); then
+  echo "用法：$0 [--cleanup]" >&2
+  exit 2
+fi
+
+if [[ ! -f "$BREWFILE_PATH" ]]; then
+  echo "❌ 找不到 Brewfile：$BREWFILE_PATH" >&2
+  exit 1
+fi
+
+backup_existing() {
+  local src="$1" dst="$2" backup suffix=0
+
+  if [[ ! -e "$dst" && ! -L "$dst" ]] || [[ "$dst" -ef "$src" ]]; then
+    return
+  fi
+
+  backup="$dst.bak.$(date +%Y%m%d%H%M%S)"
+  while [[ -e "$backup" || -L "$backup" ]]; do
+    ((suffix += 1))
+    backup="$dst.bak.$(date +%Y%m%d%H%M%S).$suffix"
+  done
+  echo "📦 備份 $dst -> $backup"
+  mv "$dst" "$backup"
+}
 
 echo "🔍 檢查 Command Line Tools (CLT)..."
 if ! xcode-select -p &>/dev/null; then
@@ -19,32 +49,50 @@ else
 fi
 
 echo "🔍 檢查 Homebrew..."
-if ! command -v brew &>/dev/null; then
+BREW_BIN="$(command -v brew || true)"
+if [[ -z "$BREW_BIN" ]]; then
+  for candidate in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+    if [[ -x "$candidate" ]]; then
+      BREW_BIN="$candidate"
+      break
+    fi
+  done
+fi
+
+if [[ -z "$BREW_BIN" ]]; then
   echo "🌐 安裝 Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  
-  # 設定 Shell 環境變數 (針對 Apple Silicon)
-  if [[ $(uname -m) == "arm64" ]]; then
-    echo "📝 設定 Homebrew PATH (Apple Silicon)..."
-    (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> "$HOME/.zprofile"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    BREW_BIN=/opt/homebrew/bin/brew
+  elif [[ -x /usr/local/bin/brew ]]; then
+    BREW_BIN=/usr/local/bin/brew
+  else
+    echo "❌ Homebrew 安裝後找不到 brew 指令" >&2
+    exit 1
   fi
 else
   echo "✅ 已安裝 Homebrew"
-  echo "🔄 更新 Homebrew..."
-  brew update
 fi
 
-if [[ ! -f "$BREWFILE_PATH" ]]; then
-  echo "❌ 找不到 Brewfile：$BREWFILE_PATH"
-  exit 1
+if ! command -v brew &>/dev/null; then
+  shellenv_line="eval \"\$($BREW_BIN shellenv)\""
+  if ! grep -qxF "$shellenv_line" "$HOME/.zprofile" 2>/dev/null; then
+    echo "📝 設定 Homebrew PATH..."
+    printf '\n%s\n' "$shellenv_line" >> "$HOME/.zprofile"
+  fi
 fi
+eval "$("$BREW_BIN" shellenv)"
+
+echo "🔄 更新 Homebrew..."
+"$BREW_BIN" update
 
 echo "📦 開始安裝 Brewfile 中的軟體..."
-brew bundle --file="$BREWFILE_PATH" --verbose
+"$BREW_BIN" bundle --file="$BREWFILE_PATH" --verbose
 
-echo "🧹 清理不在 Brewfile 中的多餘套件..."
-brew bundle cleanup --file="$BREWFILE_PATH" --force
+if [[ "$CLEANUP" == true ]]; then
+  echo "🧹 清理不在 Brewfile 中的 Homebrew 套件..."
+  "$BREW_BIN" bundle cleanup --file="$BREWFILE_PATH" --force
+fi
 
 echo "✨ 安裝 oh-my-zsh..."
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -59,25 +107,35 @@ echo "📂 部署設定檔..."
 deploy_config() {
   local src="$1"
   local dst="$2"
-  if [ -f "$src" ] || [ -d "$src" ]; then
-    if [ -e "$dst" ] && [ ! -L "$dst" ]; then
-      echo "📦 備份現有的 $(basename "$dst") -> $(basename "$dst").bak"
-      mv "$dst" "$dst.bak"
-    fi
-    echo "🚀 複製 $src -> $dst"
-    mkdir -p "$(dirname "$dst")"
-    cp -R "$src" "$dst"
-  else
-    echo "⚠️  找不到來源檔案: $src"
+  if [[ ! -f "$src" ]]; then
+    echo "❌ 找不到來源檔案：$src" >&2
+    return 1
   fi
+  if [[ -e "$dst" || -L "$dst" ]] && cmp -s "$src" "$dst"; then
+    echo "✅ 已部署 $(basename "$dst")"
+    return
+  fi
+  mkdir -p "$(dirname "$dst")"
+  backup_existing "$src" "$dst"
+  echo "🚀 複製 $src -> $dst"
+  cp "$src" "$dst"
 }
 
 # 執行部署
 echo "🔗 使用 GNU Stow 連結主要設定檔..."
-stow -t ~ wezterm zsh vim tmux git
+for config in \
+  wezterm/.wezterm.lua \
+  zsh/.zshrc \
+  vim/.vimrc \
+  tmux/.tmux.conf \
+  git/.gitconfig \
+  git/.gitignore; do
+  backup_existing "$SCRIPT_DIR/$config" "$HOME/${config#*/}"
+done
+stow -d "$SCRIPT_DIR" -t "$HOME" wezterm zsh vim tmux git
 
 echo "🚀 部署特殊路徑檔案..."
-deploy_config "./zsh/maran.zsh-theme" "$HOME/.oh-my-zsh/custom/themes/maran.zsh-theme"
+deploy_config "$SCRIPT_DIR/zsh/maran.zsh-theme" "$HOME/.oh-my-zsh/custom/themes/maran.zsh-theme"
 
 # 安裝 vim-plug
 echo "🔌 安裝 vim-plug..."
