@@ -26,6 +26,17 @@ Windows Vim loads the shared `vim/.vimrc` through `~/_vimrc`. An existing
 requires Go; install Go first if you use those plugins. Other Syntastic checkers
 also require their respective language tools.
 
+Windows setup backs up `~/.gitconfig` before changes, then includes the shared
+`git/.gitconfig` before local settings. Identical local alias/color/push settings
+are removed so future shared changes take effect; custom values, user identity,
+credentials and `safe.directory` entries are preserved. Windows overrides point
+the editor at Vim and the global ignore file at this checkout's `git/.gitignore`.
+Existing local `core.hooksPath` is preserved; new setups use `git-hooks` relative
+to each project's hook execution directory, matching this machine's previous
+configuration (not Git's default `.git/hooks`). The Mac setup and shared config
+are unchanged. Re-running setup does not duplicate the managed include. A linked
+`~/.gitconfig` is rejected to avoid modifying its shared target.
+
 Examples in PowerShell:
 
 ```powershell
