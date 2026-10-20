@@ -22,7 +22,7 @@
           "type": "git",
           "style": "plain",
           "foreground": "cyan",
-          "template": "  git:({{ .HEAD }})",
+          "template": "  git:({{ .HEAD }}{{ if or .Working.Changed .Staging.Changed }}*{{ end }})",
           "options": { "branch_icon": "", "commit_icon": "", "tag_icon": "" }
         }
       ]
