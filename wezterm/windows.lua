@@ -3,6 +3,7 @@ local wezterm = require 'wezterm'
 local module = {}
 
 function module.apply_to_config(config)
+  config.default_prog = { 'pwsh.exe', '-NoLogo' }
   config.leader = { key = '`', mods = 'NONE', timeout_milliseconds = 1000 }
 
   config.colors = {
@@ -82,8 +83,9 @@ function module.apply_to_config(config)
   config.use_fancy_tab_bar = false
   config.tab_bar_at_bottom = true
   config.show_tab_index_in_tab_bar = false
+  config.show_new_tab_button_in_tab_bar = false
 
-  wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width)
+  local function tab_text(tab, max_width)
     local index = tab.tab_index + 1
     local title = tab.active_pane.title
     if tab.tab_title and #tab.tab_title > 0 then
@@ -91,26 +93,39 @@ function module.apply_to_config(config)
     end
 
     local str = tab.is_active and string.format(" %s ", title) or string.format(" %d-%s ", index, title)
-    return { { Text = str } }
+    return wezterm.truncate_right(str, max_width)
+  end
+
+  wezterm.on("format-tab-title", function(tab, tabs, panes, conf, hover, max_width)
+    return { { Text = tab_text(tab, max_width) } }
   end)
 
   wezterm.on('update-status', function(window, pane)
     local date = wezterm.strftime '%Y.%m.%d %H:%M '
+    local conf = window:effective_config()
+    local tabs = window:mux_window():tabs_with_info()
+    local tabs_width = 0
+    for _, item in ipairs(tabs) do
+      tabs_width = tabs_width + wezterm.column_width(tab_text({
+        tab_index = item.index,
+        is_active = item.is_active,
+        tab_title = item.tab:get_title(),
+        active_pane = { title = item.tab:active_pane():get_title() },
+      }, conf.tab_max_width))
+    end
+    -- Center the tabs in the window, leaving room for the clock on the right.
+    -- Use the full tab width so splitting panes does not change the alignment.
+    local columns = window:active_tab():get_size().cols
+    local centered_start = math.floor((columns - tabs_width) / 2)
+    local latest_start = columns - wezterm.column_width(date) - tabs_width
+    local padding = string.rep(' ', math.max(0, math.min(centered_start, latest_start)))
     window:set_right_status(wezterm.format {
       { Foreground = { Color = 'yellow' } },
       { Attribute = { Intensity = 'Bold' } },
       { Text = date },
     })
 
-    window:set_left_status(wezterm.format {
-      { Foreground = { Color = 'magenta' } },
-      { Text = ' Deric ' },
-      { DefaultForeground = { } },
-      { Foreground = { Color = 'red' } },
-      { Text = '| ' },
-      { Foreground = { Color = 'cyan' } },
-      { Text = '上班這件事 ' },
-    })
+    window:set_left_status(padding)
   end)
 end
 

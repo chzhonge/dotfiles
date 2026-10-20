@@ -15,9 +15,8 @@ config.mouse_bindings = {}
 
 if is_windows then
   -- ==== Windows: Use Wezterm Native Tabs/Panes (Mimicking Tmux) ====
-  config.default_prog = { 'powershell.exe', '-NoLogo' }
-  
   -- Load the tmux-like configuration from windows.lua
+  package.path = wezterm.config_dir .. '/?.lua;' .. package.path
   local windows = require 'windows'
   windows.apply_to_config(config)
 else
