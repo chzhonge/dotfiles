@@ -8,8 +8,8 @@ Run this from the PowerShell edition you want to configure (PowerShell 7 recomme
 .\setup_windows.ps1
 ```
 
-The script installs Vim, Git, ripgrep (`rg`), fzf and Oh My Posh with WinGet
-when needed and adds a loader to
+The script installs Vim, Git, GitHub CLI (`gh`), ripgrep (`rg`), fzf and Oh My Posh
+with WinGet when needed and adds a loader to
 `$PROFILE.CurrentUserAllHosts` for that PowerShell edition. Existing profile content
 is preserved and backed up before changes. Repeating the command does not add a
 duplicate loader. Restart PowerShell after installation.

@@ -16,6 +16,7 @@ if (-not $SkipInstall) {
     $packages = @(
         @{ Id = 'JanDeDobbeleer.OhMyPosh'; Command = 'oh-my-posh' },
         @{ Id = 'Git.Git'; Command = 'git' },
+        @{ Id = 'GitHub.cli'; Command = 'gh' },
         @{ Id = 'vim.vim'; Command = 'vim' },
         # Check the package rather than Codex's private rg executable on PATH.
         @{ Id = 'BurntSushi.ripgrep.MSVC'; Command = $null },
