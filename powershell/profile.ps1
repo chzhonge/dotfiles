@@ -1,4 +1,4 @@
-# Use Tab for inline predictions while retaining ordinary completion.
+# Cycle completions with Tab and leave inline predictions on RightArrow.
 $dotfilesReadLineOptions = Get-Command Set-PSReadLineOption -ErrorAction SilentlyContinue
 if ($dotfilesReadLineOptions -and $dotfilesReadLineOptions.Parameters.ContainsKey('PredictionSource') -and
     -not [Console]::IsOutputRedirected) {
@@ -6,21 +6,7 @@ if ($dotfilesReadLineOptions -and $dotfilesReadLineOptions.Parameters.ContainsKe
         Set-PSReadLineOption -PredictionSource History
     }
     Set-PSReadLineOption -PredictionViewStyle InlineView
-    Set-PSReadLineKeyHandler -Key Tab -BriefDescription AcceptSuggestionOrComplete -ScriptBlock {
-        param($key, $arg)
-
-        $line = $null
-        $cursor = 0
-        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-        # A history suggestion can replace a partial path and prevent cycling its matches.
-        if ($cursor -eq $line.Length -and $line -notmatch '^\s*(?:ls|vim)\s') {
-            $originalLine = $line
-            [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion($key, $arg)
-            [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-            if ($line -cne $originalLine) { return }
-        }
-        [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext($key, $arg)
-    }
+    Set-PSReadLineKeyHandler -Key Tab -Function TabCompleteNext
 }
 
 # Some Windows Vim installers do not add the console executable to PATH.
