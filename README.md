@@ -9,10 +9,12 @@ Run this from the PowerShell edition you want to configure (PowerShell 7 recomme
 ```
 
 The script installs Vim, Git, GitHub CLI (`gh`), ripgrep (`rg`), fzf and Oh My Posh
-with WinGet when needed and adds a loader to
-`$PROFILE.CurrentUserAllHosts` for that PowerShell edition. Existing profile content
-is preserved and backed up before changes. Repeating the command does not add a
-duplicate loader. Restart PowerShell after installation.
+with WinGet when needed. It also installs `posh-git` from PowerShell Gallery for the
+current user so Git subcommands and branch names can be completed with Tab.
+The script adds a loader to `$PROFILE.CurrentUserAllHosts` for that PowerShell
+edition. Existing profile content is preserved and backed up before changes.
+Repeating the command does not add a duplicate loader. Restart PowerShell after
+installation.
 
 `powershell/profile.ps1` loads `oh-my-posh/maran.omp.json` relative to the checkout.
 Keep the checkout in place. The theme mirrors `zsh/maran.zsh-theme`: user, host,

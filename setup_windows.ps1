@@ -33,6 +33,14 @@ if (-not $SkipInstall) {
             throw "$($package.Id) installation failed (exit code $LASTEXITCODE)."
         }
     }
+
+    if (-not (Get-Module -ListAvailable -Name posh-git)) {
+        if (Get-Command Install-PSResource -ErrorAction SilentlyContinue) {
+            Install-PSResource -Name posh-git -Repository PSGallery -Scope CurrentUser -TrustRepository
+        } else {
+            Install-Module -Name posh-git -Repository PSGallery -Scope CurrentUser -Force
+        }
+    }
 }
 
 # Put the shared Git config first, followed by machine-specific overrides.
