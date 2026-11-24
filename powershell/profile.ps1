@@ -1,8 +1,8 @@
 # Use Tab for inline predictions while retaining ordinary completion.
 $dotfilesReadLineOptions = Get-Command Set-PSReadLineOption -ErrorAction SilentlyContinue
 if ($dotfilesReadLineOptions -and $dotfilesReadLineOptions.Parameters.ContainsKey('PredictionSource') -and
-    $Host.UI.SupportsVirtualTerminal -and -not [Console]::IsOutputRedirected) {
-    if ((Get-PSReadLineOption).PredictionSource -eq 'None') {
+    -not [Console]::IsOutputRedirected) {
+    if ($Host.UI.SupportsVirtualTerminal -and (Get-PSReadLineOption).PredictionSource -eq 'None') {
         Set-PSReadLineOption -PredictionSource History
     }
     Set-PSReadLineOption -PredictionViewStyle InlineView
@@ -51,4 +51,9 @@ if (-not (Get-Command tig -ErrorAction SilentlyContinue)) {
 if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     $maranThemePath = Join-Path $PSScriptRoot '../oh-my-posh/maran.omp.json'
     oh-my-posh init pwsh --config $maranThemePath | Invoke-Expression
+}
+
+# Register Git argument completion after the prompt has been initialized.
+if (Get-Module -ListAvailable -Name posh-git) {
+    Import-Module posh-git
 }
