@@ -3,6 +3,12 @@ local wezterm = require 'wezterm'
 local module = {}
 
 function module.apply_to_config(config)
+  config.font = wezterm.font_with_fallback {
+    'JetBrains Mono',
+    'Sarasa Mono TC',
+  }
+  config.font_size = 13.0
+
   config.default_prog = { 'pwsh.exe', '-NoLogo' }
   config.leader = { key = '`', mods = 'NONE', timeout_milliseconds = 1000 }
 
