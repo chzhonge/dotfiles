@@ -1,3 +1,27 @@
+# Use Tab for inline predictions while retaining ordinary completion.
+$dotfilesReadLineOptions = Get-Command Set-PSReadLineOption -ErrorAction SilentlyContinue
+if ($dotfilesReadLineOptions -and $dotfilesReadLineOptions.Parameters.ContainsKey('PredictionSource') -and
+    $Host.UI.SupportsVirtualTerminal -and -not [Console]::IsOutputRedirected) {
+    if ((Get-PSReadLineOption).PredictionSource -eq 'None') {
+        Set-PSReadLineOption -PredictionSource History
+    }
+    Set-PSReadLineOption -PredictionViewStyle InlineView
+    Set-PSReadLineKeyHandler -Key Tab -BriefDescription AcceptSuggestionOrComplete -ScriptBlock {
+        param($key, $arg)
+
+        $line = $null
+        $cursor = 0
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+        if ($cursor -eq $line.Length) {
+            $originalLine = $line
+            [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion($key, $arg)
+            [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
+            if ($line -cne $originalLine) { return }
+        }
+        [Microsoft.PowerShell.PSConsoleReadLine]::TabCompleteNext($key, $arg)
+    }
+}
+
 # Some Windows Vim installers do not add the console executable to PATH.
 if (-not (Get-Command vim -ErrorAction SilentlyContinue)) {
     foreach ($vimRoot in @("$env:LOCALAPPDATA/Programs/Vim", "$env:ProgramFiles/Vim", "${env:ProgramFiles(x86)}/Vim")) {
