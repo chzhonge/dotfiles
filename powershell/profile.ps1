@@ -12,7 +12,8 @@ if ($dotfilesReadLineOptions -and $dotfilesReadLineOptions.Parameters.ContainsKe
         $line = $null
         $cursor = 0
         [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
-        if ($cursor -eq $line.Length) {
+        # A history suggestion can replace a partial path and prevent cycling its matches.
+        if ($cursor -eq $line.Length -and $line -notmatch '^\s*(?:ls|vim)\s') {
             $originalLine = $line
             [Microsoft.PowerShell.PSConsoleReadLine]::AcceptSuggestion($key, $arg)
             [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
